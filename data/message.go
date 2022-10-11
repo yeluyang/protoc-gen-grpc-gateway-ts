@@ -74,6 +74,8 @@ type Field struct {
 	OneOfIndex int32
 	// IsRepeated indicates whether the field is a repeated field
 	IsRepeated bool
+	// IsOptional indicates whether the field is a optional field (since proto 3.15)
+	IsOptional bool
 }
 
 // GetType returns some information of the type to aid the rendering

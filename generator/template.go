@@ -45,14 +45,14 @@ export type {{.Name}} = Base{{.Name}}
 {{- else -}}
 export type {{.Name}} = {
 {{- range .Fields}}
-  {{fieldName .Name}}?: {{tsType .}}
+  {{fieldName .Name}}{{if or .IsOptional}}?{{end}}: {{tsType .}}
 {{- end}}
 }
 {{end}}
 {{end}}{{end}}
 
 {{define "services"}}{{range .}}export class {{.Name}} {
-{{- range .Methods}}  
+{{- range .Methods}}
 {{- if .ServerStreaming }}
   static {{.Name}}(req: {{tsType .Input}}, entityNotifier?: fm.NotifyStreamEntityArrival<{{tsType .Output}}>, initReq?: fm.InitReq): Promise<void> {
     return fm.fetchStreamingRequest<{{tsType .Input}}, {{tsType .Output}}>(` + "`{{renderURL .}}`" + `, entityNotifier, {...initReq, {{buildInitReq .}}})
@@ -323,7 +323,7 @@ type FlattenedRequestPayload = Record<string, Primitive | Array<Primitive>>;
 
 /**
  * Checks if given value is a plain object
- * Logic copied and adapted from below source: 
+ * Logic copied and adapted from below source:
  * https://github.com/char0n/ramda-adjunct/blob/master/src/isPlainObj.js
  * @param  {unknown} value
  * @return {boolean}
